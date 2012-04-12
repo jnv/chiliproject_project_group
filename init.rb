@@ -1,10 +1,10 @@
 require 'redmine'
 
 Redmine::Plugin.register :chiliproject_project_group do
-  name 'Chiliproject Project Group plugin'
-  author 'Author name'
-  description 'This is a plugin for ChiliProject'
+  name 'Project Groups'
+  author 'Jan Vlnas'
+  description 'Provides per-project user groups'
   version '0.0.1'
-  url 'http://example.com/path/to/plugin'
-  author_url 'http://example.com/about'
+  url 'https://github.com/jnv/chiliproject_project_group'
+  author_url 'https://github.com/jnv'
 end
