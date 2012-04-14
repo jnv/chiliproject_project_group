@@ -1,6 +1,6 @@
-require File.expand_path('../../../test_helper', __FILE__)
+require File.expand_path('../../../../test_helper', __FILE__)
 
-class ProjectGroupProjectPatchTest < Test::Unit::TestCase
+class ProjectGroupPlugin::ProjectPatchTest < Test::Unit::TestCase
 
   context "Project" do
     subject {Project.new}
