@@ -1,0 +1,11 @@
+<h2>
+  <%= link_to l(:label_settings), :controller => "projects", :action => "settings", :id => @project, :tab => "project_groups" %> &#187;
+  <%= l :label_group_plural %> &#187;
+  <%= h @project_group %>
+</h2>
+
+<ul>
+<% @project_group.users.each do |user| %>
+    <li><%=h user %></li>
+<% end %>
+</ul>
