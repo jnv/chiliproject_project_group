@@ -1,8 +1,24 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class ProjectGroupsControllerTest < ActionController::TestCase
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  setup do
+    @controller = ProjectGroupsController.new
+    @request = ActionController::TestRequest.new
+    @response = ActionController::TestResponse.new
+    Setting.default_language = 'en'
+    @request.session[:user_id] = 2 # manager
+
+    @group = ProjectGroup.generate!
   end
+
+  context "GET show" do
+    setup do
+      get :show, @group
+    end
+
+    should_assign_to :project_group
+
+  end
+
+
 end
