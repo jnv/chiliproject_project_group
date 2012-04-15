@@ -7,6 +7,9 @@ Dispatcher.to_prepare :project_role_plugin do
 
   require_dependency 'projects_helper'
   ProjectsHelper.send(:include, ProjectGroupPlugin::ProjectsHelperPatch) unless ProjectsHelper.included_modules.include? ProjectGroupPlugin::ProjectsHelperPatch
+
+  require_dependency 'projects_controller'
+  ProjectsController.send(:include, ProjectGroupPlugin::ProjectsControllerPatch) unless ProjectsHelper.included_modules.include? ProjectGroupPlugin::ProjectsControllerPatch
 end
 
 Redmine::Plugin.register :chiliproject_project_group do
