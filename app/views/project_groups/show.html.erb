@@ -1,5 +1,5 @@
 <h2>
-  <%= link_to l(:label_settings), :controller => "projects", :action => "settings", :id => @project, :tab => "project_groups" %> &#187;
+  <%= link_to_project_settings(@project) %> &#187;
   <%= l :label_group_plural %> &#187;
   <%= h @project_group %>
 </h2>
