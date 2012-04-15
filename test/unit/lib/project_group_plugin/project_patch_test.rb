@@ -14,11 +14,15 @@ class ProjectGroupPlugin::ProjectPatchTest < ActiveSupport::TestCase
       setup do
         @group = ProjectGroup.generate!
         @project = Project.generate!(:trackers => [])
-        Member.generate(:principal => @group, :project => @project)
+        @member = Member.generate(:principal => @group, :project => @project)
       end
 
-      should "include ProjectGroups" do
-        assert_include @project.member_principals, @group
+      should "include member which is ProjectGroup" do
+        assert_include @project.member_principals, @member
+      end
+
+      should "include ProjectGroups through principals" do
+        assert_include @project.principals, @group
       end
 
     end
