@@ -6,13 +6,13 @@ class ProjectGroupsController < ApplicationController
   #before_filter :find_project_from_association, :except => :new
   before_filter :authorize
 
-
   def show
     @project_group = ProjectGroup.find(params[:id])
   end
 
   def edit
     @project_group = ProjectGroup.find(params[:id])
+    @users_not_in_group = User.active.not_in_group(@project_group).all(:limit => 100)
   end
 
   def create
