@@ -14,6 +14,8 @@ module ProjectGroupPlugin
         has_many :member_principals, :class_name => 'Member',
                  :include => :principal,
                  :conditions => "#{Principal.table_name}.type='ProjectGroup' OR #{Principal.table_name}.type='Group' OR (#{Principal.table_name}.type='User' AND #{Principal.table_name}.status=#{User::STATUS_ACTIVE})"
+
+        alias_method_chain :set_parent!, :project_groups
       end
     end
 
@@ -21,6 +23,11 @@ module ProjectGroupPlugin
     end
 
     module InstanceMethods
+
+      def set_parent_with_project_groups!(p)
+        set_parent_without_project_groups!(p)
+      end
+
     end
 
   end
