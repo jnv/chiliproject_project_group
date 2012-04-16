@@ -19,6 +19,13 @@ class ProjectGroupTest < ActiveSupport::TestCase
     assert g.save
   end
 
+  should "check uniqueness of groups within same project" do
+    assert_difference 'ProjectGroup.count', 2 do
+      ProjectGroup.generate_with_project!(:lastname => "A group")
+      ProjectGroup.generate_with_project!(:lastname => "A group")
+    end
+  end
+
   context "#add_to_descendants" do
     setup do
       @project = Project.generate!

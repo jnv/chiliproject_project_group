@@ -4,6 +4,7 @@ class ProjectGroup < Group
   generator_for :lastname, :start => 'Project Group 00'
 
   generator_for :projects, :method => :generate_projects
+  #generator_for :parent_project, :method => :generate_parent_project
 
   def self.generate_projects
     [Project.generate!]
@@ -23,4 +24,8 @@ def ProjectGroup.generate_for_project!(project, is_manageable = true, attributes
   scope.save!
 
   group
+end
+
+def ProjectGroup.generate_with_project!(attributes = {})
+  ProjectGroup.generate_for_project!(Project.generate!, true, attributes)
 end
