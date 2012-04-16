@@ -8,4 +8,15 @@ class ProjectGroupScopeTest < ActiveSupport::TestCase
 
   should_not_allow_mass_assignment_of :manageable
 
+  context "Instance" do
+    subject { ProjectGroupScope.new }
+
+    [:manageable?, :users, :lastname].each do |method|
+      should "respond to #{method}" do
+        assert_respond_to subject, method
+      end
+    end
+
+  end
+
 end
