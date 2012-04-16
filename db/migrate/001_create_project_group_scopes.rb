@@ -7,10 +7,12 @@ class CreateProjectGroupScopes < ActiveRecord::Migration
       t.column :manageable, :boolean, :default => false, :null => false
     end
     add_index :project_group_scopes, [:project_id, :project_group_id], :unique => true
+
+    #add_index
   end
 
   def self.down
-    #TODO: clean-up all ProjectGroups
+    ProjectGroup.all.map(&:destroy)
     drop_table :project_group_scopes
   end
 end
