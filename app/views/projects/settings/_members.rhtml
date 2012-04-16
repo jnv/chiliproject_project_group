@@ -1,7 +1,12 @@
-<%= error_messages_for 'member' %>
+<%
+   roles ||= load_roles
+   members ||= load_members(@project)
+   principals ||= load_principals(@project)
+%>
 
+<%= error_messages_for 'member' %>
 <div class="splitcontentleft">
-<% if @members.any? %>
+<% if members.any? %>
 <table class="list members">
 	<thead><tr>
 	  <th><%= l(:label_user) %> / <%= l(:label_group) %></th>
@@ -10,7 +15,7 @@
           <%= call_hook(:view_projects_settings_members_table_header, :project => @project) %>
 	</tr></thead>
 	<tbody>
-	<% @members.each do |member| %>
+	<% members.each do |member| %>
 	<% next if member.new_record? %>
 	<tr id="member-<%= member.id %>" class="<%= cycle 'odd', 'even' %> member">
 	<td class="<%= member.principal.class.name.downcase %>"><%= link_to_user member.principal %></td>
@@ -20,7 +25,7 @@
       <% remote_form_for(:member, member, :url => {:controller => 'members', :action => 'edit', :id => member},
       																		:method => :post,
       																		:html => { :id => "member-#{member.id}-roles-form", :class => 'hol' }) do |f| %>
-      	<p><% @roles.each do |role| %>
+      	<p><% roles.each do |role| %>
         <label><%= check_box_tag 'member[role_ids][]', role.id, member.roles.include?(role),
         																							 :disabled => member.member_roles.detect {|mr| mr.role_id == role.id && !mr.inherited_from.nil?} %> <%=h role %></label><br />
         <% end %></p>
@@ -50,7 +55,7 @@
 
 
 <div class="splitcontentright">
-<% if @roles.any? && @principals.any? %>
+<% if roles.any? && principals.any? %>
   <% remote_form_for(:member, @member, :url => {:controller => 'members', :action => 'new', :id => @project}, :method => :post,
 									   :loading => '$(\'member-add-submit\').disable();',
 									   :complete => 'if($(\'member-add-submit\')) $(\'member-add-submit\').enable();') do |f| %>
@@ -65,11 +70,11 @@
                   %>
 
 		<div id="principals">
-			<%= principals_check_box_tags 'member[user_ids][]', @principals %>
+			<%= principals_check_box_tags 'member[user_ids][]', principals %>
 		</div>
 
     <p><%= l(:label_role_plural) %>:
-    <% @roles.each do |role| %>
+    <% roles.each do |role| %>
     	<label><%= check_box_tag 'member[role_ids][]', role.id %> <%=h role %></label>
    	<% end %></p>
 

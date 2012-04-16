@@ -27,6 +27,18 @@ module ProjectGroupPlugin
         tabs
       end
 
+      def load_roles
+        Role.find_all_givable
+      end
+
+      def load_members(project)
+        project.member_principals.find(:all, :include => [:roles, :principal]).sort
+      end
+
+      def load_principals(project)
+        project.project_groups + Principal.active.find(:all, :limit => 100, :order => 'type, login, lastname ASC') - project.principals
+      end
+
     end
 
   end

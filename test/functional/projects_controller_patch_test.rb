@@ -22,30 +22,6 @@ class ProjectsControllerTest < ActionController::TestCase
       should_render_template :settings
     end
 
-    context "#load_members" do
-      setup do
-        @project_group = ProjectGroup.new({:lastname => "Project Group 1"})
-        @nonproject_group = ProjectGroup.new({:lastname => "Project Group 2"})
-        @project_group_member = User.find(5)
-        @project_group.users << @project_group_member
-        @project = Project.find(1)
-        @project.project_groups << @project_group
-
-        get :settings, :id => 1
-      end
-
-      should_assign_to(:roles)
-      should_assign_to(:members)
-      should_assign_to(:principals)
-
-      should "assign project groups to principals" do
-        assert_include assigns(:principals), @project_group
-      end
-
-      should "not assign non-project group to principals" do
-        assert_not_include assigns(:principals), @nonproject_group
-      end
-    end
 
   end
 
