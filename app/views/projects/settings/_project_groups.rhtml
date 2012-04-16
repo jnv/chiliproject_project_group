@@ -11,6 +11,7 @@
       <thead>
       <tr>
         <th><%= l(:label_group) %></th>
+        <th><%= l(:label_project) %></th>
         <th><%= l(:label_user_plural) %></th>
         <th></th>
       </tr>
@@ -26,6 +27,7 @@
                   <%= link_to h(group), project_group_path(@project, group) %>
               <% end %>
             </td>
+            <td><%= link_to group.parent_project %></td>
             <td align="center"><%= group.users.size %></td>
             <td class="buttons">
               <% if scope.manageable? %>
