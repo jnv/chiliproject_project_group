@@ -8,9 +8,9 @@ class ProjectGroupPlugin::ProjectsHelperPatchTest < ActiveSupport::TestCase
 
   def setup
     @project = Project.find(1)
-    @project_group = ProjectGroup.new({:lastname => "Project Group 1", :parent_project => })
+    @project_group = ProjectGroup.new(:lastname => "Project Group 1")
     @project_group.parent_project = @project
-    @nonproject_group = ProjectGroup.new({:lastname => "Project Group 2", :parent_project => @project})
+    @nonproject_group = ProjectGroup.new(:lastname => "Project Group 2")
     @nonproject_group.parent_project = Project.generate!
     @project_group_member = User.find(5)
     @project_group.users << @project_group_member

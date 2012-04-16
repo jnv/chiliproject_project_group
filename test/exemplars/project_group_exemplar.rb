@@ -10,3 +10,17 @@ class ProjectGroup < Group
   end
 
 end
+
+def ProjectGroup.generate_for_project!(project, is_manageable = true, attributes={})
+  group = ProjectGroup.spawn(attributes) do |group|
+    group.parent_project = project
+    group.projects = []
+  end
+  group.save!
+
+  scope = group.project_group_scopes.create(:project => project)
+  scope.manageable = is_manageable
+  scope.save!
+
+  group
+end
