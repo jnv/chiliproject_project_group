@@ -3,8 +3,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class ProjectGroupsControllerTest < ActionController::TestCase
 
-  fixtures :projects, :users, :member_roles, :members
-
+  fixtures :projects, :versions, :users, :roles, :members, :member_roles
 
   def setup
     @controller = ProjectGroupsController.new
@@ -13,6 +12,7 @@ class ProjectGroupsControllerTest < ActionController::TestCase
     Setting.default_language = 'en'
 
     Role.find(1).add_permission! :manage_project_groups
+    #User.current = nil
     @request.session[:user_id] = 2 # manager, member of Project 1
 
     @project = Project.find(1)
