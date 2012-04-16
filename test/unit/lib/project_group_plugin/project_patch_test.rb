@@ -14,7 +14,7 @@ class ProjectGroupPlugin::ProjectPatchTest < ActiveSupport::TestCase
     context "#member_principals" do
       setup do
         @project = Project.generate!(:trackers => [])
-        @group = ProjectGroup.generate!(:projects => [@project])
+        @group = ProjectGroup.generate!(:projects => [@project], :parent_project => @project)
         @member = Member.generate(:principal => @group, :project => @project)
       end
 

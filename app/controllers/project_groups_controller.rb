@@ -20,7 +20,7 @@ class ProjectGroupsController < ApplicationController
 
   def create
     @project_group = ProjectGroup.new(params[:project_group])
-
+    @project_group.parent_project = @project
     respond_to do |format|
       if @project_group.save
         # Group is manageable for the project in which was created
