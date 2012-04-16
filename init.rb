@@ -20,5 +20,5 @@ Redmine::Plugin.register :chiliproject_project_group do
   url 'https://github.com/jnv/chiliproject_project_group'
   author_url 'https://github.com/jnv'
 
-  permission :manage_project_groups, {:project_groups => [:show, :edit, :create,  :destroy, :add_users, :remove_user]}, :require => :member
+  permission :manage_project_groups, {:project_groups => [:show, :edit, :create, :update, :destroy, :add_users, :remove_user]}, :require => :member
 end

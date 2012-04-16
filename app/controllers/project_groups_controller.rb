@@ -17,13 +17,29 @@ class ProjectGroupsController < ApplicationController
   def create
   end
 
+  # PUT /groups/1
+  # PUT /groups/1.xml
+  def update
+    respond_to do |format|
+      if @project_group.update_attributes(params[:project_group])
+        flash[:notice] = l(:notice_successful_update)
+        format.html { redirect_to(edit_project_group_url(@project, @project_group, :tab => 'general')) }
+        format.xml { head :ok }
+      else
+        load_users
+        format.html { render :action => "edit", :tab => 'general' }
+        format.xml { render :xml => @group.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   def add_users
     users = User.find_all_by_id(params[:user_ids])
     @project_group.users << users if request.post?
-    load_users
     respond_to do |format|
       format.html { redirect_to :controller => 'project_groups', :action => 'edit', :id => @project_group, :tab => 'users' }
       format.js {
+        load_users
         render(:update) { |page|
           page.replace_html "tab-content-users", :partial => 'project_groups/users'
           users.each { |user| page.visual_effect(:highlight, "user-#{user.id}") }
@@ -34,10 +50,13 @@ class ProjectGroupsController < ApplicationController
 
   def remove_user
     @project_group.users.delete(User.find(params[:user_id])) if request.post?
-    load_users
     respond_to do |format|
       format.html { redirect_to :controller => 'project_groups', :action => 'edit', :id => @group, :tab => 'users' }
-      format.js { render(:update) { |page| page.replace_html "tab-content-users", :partial => 'project_groups/users' } }
+      format.js {
+        load_users
+        render(:update) { |page|
+          page.replace_html "tab-content-users", :partial => 'project_groups/users' }
+      }
     end
   end
 
