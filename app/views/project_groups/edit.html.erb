@@ -4,53 +4,6 @@
   <%= h @project_group %>
 </h2>
 
-<div class="splitcontentleft">
-  <% if @project_group.users.any? %>
-      <table class="list users">
-        <thead>
-        <tr>
-          <th><%= l(:label_user) %></th>
-          <th style="width:15%"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @project_group.users.sort.each do |user| %>
-            <tr id="user-<%= user.id %>" class="<%= cycle 'odd', 'even' %>">
-              <td class="user"><%= link_to_user user %></td>
-              <td class="buttons">
-                <%= link_to_remote l(:button_delete), {:url => {:controller => 'groups', :action => 'remove_user', :id => @project_group, :user_id => user},
-                                                       :method => :post},
-                                   :class => 'icon icon-del' %>
-              </td>
-            </tr>
-        <% end %>
-        </tbody>
-      </table>
-  <% else %>
-      <p class="nodata"><%= l(:label_no_data) %></p>
-  <% end %>
-</div>
+<%= render_tabs project_group_settings_tabs %>
 
-<div class="splitcontentright">
-  <% if @users_not_in_group.any? %>
-      <% remote_form_for(:project_group, @project_group, :url => {:controller => 'project_groups', :action => 'add_users', :id => @project_group}, :method => :post) do |f| %>
-          <fieldset>
-            <legend><%= l(:label_user_new) %></legend>
-            <p><%= label_tag "user_search", l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
-            <%= observe_field(:user_search,
-                              :frequency => 0.5,
-                              :update => :users,
-                              :url => auto_complete_users_path(:remove_group_members => @project_group),
-                              :with => 'q')
-            %>
-
-            <div id="users">
-              <%= principals_check_box_tags 'user_ids[]', @users_not_in_group %>
-            </div>
-
-            <p><%= submit_tag l(:button_add) %></p>
-          </fieldset>
-      <% end %>
-  <% end %>
-
-</div>
+<% html_title(l(:label_group), @project_group, @project) -%>

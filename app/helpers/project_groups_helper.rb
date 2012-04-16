@@ -10,4 +10,10 @@ module ProjectGroupsHelper
 
   end
 
+  def project_group_settings_tabs
+    tabs = [{:name => 'users', :partial => 'project_groups/users', :label => :label_user_plural},
+            {:name => 'general', :partial => 'project_groups/general', :label => :label_general}
+    ]
+  end
+
 end
