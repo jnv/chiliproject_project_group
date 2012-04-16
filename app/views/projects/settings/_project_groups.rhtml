@@ -7,7 +7,7 @@
 
 <%= error_messages_for 'project_groups' %>
 
-<% if groups.any? %>
+<% if group_scopes.any? %>
     <table class="list groups">
       <thead>
       <tr>
@@ -17,11 +17,22 @@
       </tr>
       </thead>
       <tbody>
-      <% groups.each do |group| %>
+      <% group_scopes.each do |scope| %>
+          <% group = scope.project_group %>
           <tr class="<%= cycle 'odd', 'even' %>">
-            <td><%= link_to h(group), edit_project_group_path(@project, group) %></td>
+            <td>
+              <% if scope.manageable? %>
+                  <%= link_to h(group), edit_project_group_path(@project, group) %>
+              <% else %>
+                  <%= link_to h(group), project_group_path(@project, group) %>
+              <% end %>
+            </td>
             <td align="center"><%= group.users.size %></td>
-            <td class="buttons"><%= link_to l(:button_delete), group, :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %></td>
+            <td class="buttons">
+              <% if scope.manageable? %>
+                  <%= link_to l(:button_delete), group, :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
+              <% end %>
+            </td>
           </tr>
       <% end %>
       </table>
