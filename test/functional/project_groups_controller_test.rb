@@ -75,7 +75,7 @@ class ProjectGroupsControllerTest < ActionController::TestCase
 
   context "POST add_users" do
     should "add users" do
-      assert_difference "Group.find(#{@group.id}).users.count", 2 do
+      assert_difference "ProjectGroup.find(#{@group.id}).users.count", 2 do
         post :add_users, :project_id => @project, :id => @group, :user_ids => ['2', '3']
       end
     end
@@ -83,7 +83,7 @@ class ProjectGroupsControllerTest < ActionController::TestCase
 
   context "POST remove_users" do
     should "remove users" do
-      assert_difference "Group.find(#{@group.id}).users.count", -1 do
+      assert_difference "ProjectGroup.find(#{@group.id}).users.count", -1 do
         post :remove_user, :project_id => @project, :id => @group, :user_id => @member.id
       end
     end
@@ -91,7 +91,7 @@ class ProjectGroupsControllerTest < ActionController::TestCase
 
   context "POST create" do
     should "create new manageable group" do
-      assert_difference 'Group.count', 1 do
+      assert_difference 'ProjectGroup.count', 1 do
         post :create, :project_id => @project, :project_group => {:lastname => 'New project group'}
       end
       assert_true ProjectGroupScope.last.manageable, "Group should be manageable when created in the project"
