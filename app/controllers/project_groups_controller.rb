@@ -5,8 +5,7 @@ class ProjectGroupsController < ApplicationController
   before_filter :find_project_by_project_id
   before_filter :authorize
   before_filter :find_model_object, :except => [:new, :create] #assigns @project_group
-
-  #before_filter :authorize_manageable
+  before_filter :authorize_manageable, :except => [:new, :create, :show]
 
   def show
   end
@@ -82,12 +81,19 @@ class ProjectGroupsController < ApplicationController
 
   protected
 
+  # Loads users not present in the group
   def load_users
     @users_not_in_group = User.active.not_in_group(@project_group).all(:limit => 100)
   end
 
+  # Prevents access if the group is not in project's scope or is not manageable
   def authorize_manageable
-    #TODO
-    true
+    @project_group_scope = @project_group.scope_with_project(@project)
+
+    if @project_group_scope and @project_group_scope.manageable?
+      true
+    else
+      deny_access
+    end
   end
 end

@@ -21,6 +21,10 @@ class ProjectGroupsControllerTest < ActionController::TestCase
     @member = User.generate!
     @group.users << @member
 
+    @project_group_scope = @group.scope_with_project(@project)
+    @project_group_scope.manageable = true
+    @project_group_scope.save!
+
     @nonmember = User.generate!
   end
 
@@ -93,6 +97,33 @@ class ProjectGroupsControllerTest < ActionController::TestCase
       assert_true ProjectGroupScope.last.manageable, "Group should be manageable when created in the project"
       #assert_redirected_to ''
     end
+  end
+
+  context "#authorize_manageable" do
+    setup do
+      @project_group_scope.manageable = false
+      @project_group_scope.save!
+    end
+
+    {:edit => :get, :update => :put, :remove_user => :post, :add_users => :post}.each do |action, verb|
+      context "#{verb.to_s.upcase} #{action}" do
+        setup do
+          self.send verb, action, :project_id => @project, :id => @group
+        end
+        should_respond_with 403 # access denied
+      end
+    end
+
+    {:show => :get, :new => :get, :create => :post}.each do |action, verb|
+      context "#{verb.to_s.upcase} #{action}" do
+        setup do
+          self.send verb, action, :project_id => @project, :id => @group
+        end
+        should_respond_with :success
+      end
+    end
+
+
   end
 
 
