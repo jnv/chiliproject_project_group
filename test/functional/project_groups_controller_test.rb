@@ -32,6 +32,18 @@ class ProjectGroupsControllerTest < ActionController::TestCase
     should_assign_to(:project_group) { @group }
   end
 
+  context "GET new" do
+    setup do
+      get :new, :project_id => @project
+    end
+
+    should_assign_to :project_group, :class => ProjectGroup
+
+    should "assign a project to the assigned group" do
+      assert_include assigns(:project_group).projects, @project
+    end
+  end
+
   context "GET edit" do
     setup do
       get :edit, :project_id => @project, :id => @group
@@ -70,6 +82,16 @@ class ProjectGroupsControllerTest < ActionController::TestCase
       assert_difference "Group.find(#{@group.id}).users.count", -1 do
         post :remove_user, :project_id => @project, :id => @group, :user_id => @member.id
       end
+    end
+  end
+
+  context "POST create" do
+    should "create new manageable group" do
+      assert_difference 'Group.count', 1 do
+        post :create, :project_id => @project, :project_group => {:lastname => 'New project group'}
+      end
+      assert_true ProjectGroupScope.last.manageable, "Group should be manageable when created in the project"
+      #assert_redirected_to ''
     end
   end
 

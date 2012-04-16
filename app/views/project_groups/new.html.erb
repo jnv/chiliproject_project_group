@@ -1,0 +1,10 @@
+<h2>
+  <%= link_to_project_settings(@project) %> &#187;
+  <%= l :label_group_plural %> &#187;
+  <%= l(:label_group_new) %>
+</h2>
+
+<% form_for(@project_group, :builder => TabularFormBuilder, :lang => current_language) do |f| %>
+    <%= render :partial => 'form', :locals => {:f => f} %>
+    <p><%= f.submit l(:button_create) %></p>
+<% end %>

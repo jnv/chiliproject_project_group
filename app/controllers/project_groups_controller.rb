@@ -4,7 +4,7 @@ class ProjectGroupsController < ApplicationController
   model_object ProjectGroup
   before_filter :find_project_by_project_id
   before_filter :authorize
-  before_filter :find_model_object, :except => [:create] #assigns @project_group
+  before_filter :find_model_object, :except => [:new, :create] #assigns @project_group
 
   #before_filter :authorize_manageable
 
@@ -15,16 +15,35 @@ class ProjectGroupsController < ApplicationController
     load_users
   end
 
-  def create
+  def new
+    @project_group = ProjectGroup.new(:projects => [@project])
   end
 
-  # PUT /groups/1
-  # PUT /groups/1.xml
+  def create
+    @project_group = ProjectGroup.new(params[:project_group])
+
+    respond_to do |format|
+      if @project_group.save
+        # Group is manageable for the project in which was created
+        scope = @project_group.project_group_scopes.create(:project => @project)
+        scope.manageable = true
+        scope.save!
+
+        flash[:notice] = l(:notice_successful_create)
+        format.html { redirect_to edit_project_group_url(@project, @project_group, :tab => 'users') }
+        format.xml { render :xml => @project_group, :status => :created, :location => @project_group }
+      else
+        format.html { render :action => "new" }
+        format.xml { render :xml => @project_group.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   def update
     respond_to do |format|
       if @project_group.update_attributes(params[:project_group])
         flash[:notice] = l(:notice_successful_update)
-        format.html { redirect_to(edit_project_group_url(@project, @project_group, :tab => 'general')) }
+        format.html { redirect_to(edit_project_group_url(@project, @project_group)) }
         format.xml { head :ok }
       else
         load_users
@@ -38,7 +57,7 @@ class ProjectGroupsController < ApplicationController
     users = User.find_all_by_id(params[:user_ids])
     @project_group.users << users if request.post?
     respond_to do |format|
-      format.html { redirect_to :controller => 'project_groups', :action => 'edit', :id => @project_group, :tab => 'users' }
+      format.html { redirect_to edit_project_group_url(@project, @project_group, :tab => 'users') }
       format.js {
         load_users
         render(:update) { |page|
