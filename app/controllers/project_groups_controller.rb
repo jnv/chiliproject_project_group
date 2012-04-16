@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class ProjectGroupsController < ApplicationController
   unloadable
   model_object ProjectGroup

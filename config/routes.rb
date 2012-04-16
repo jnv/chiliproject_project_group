@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 ActionController::Routing::Routes.draw do |map|
   map.resources :projects do |project|
     project.resources :project_groups, :except => [:index], :name_prefix => "", :member => { :add_users => :post, :remove_user => :post}

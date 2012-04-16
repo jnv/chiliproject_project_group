@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require_dependency 'project_group'
 class ProjectGroup < Group
   generator_for :lastname, :start => 'Project Group 00'

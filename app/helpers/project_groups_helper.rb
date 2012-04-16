@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module ProjectGroupsHelper
 
   # Generate link to a given project's settings

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class ProjectGroupScope < ActiveRecord::Base
   unloadable
 

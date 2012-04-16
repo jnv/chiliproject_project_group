@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateProjectGroupScopes < ActiveRecord::Migration
   def self.up
     create_table :project_group_scopes, :id => false do |t|
