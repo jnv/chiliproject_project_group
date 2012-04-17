@@ -25,8 +25,82 @@ module ProjectGroupPlugin
 
     module InstanceMethods
 
+      # Overrides Project#set_parent!
+      # Executes rebuild_groups_hierarchy
       def set_parent_with_project_groups!(p)
-        set_parent_without_project_groups!(p)
+        # Get the real object
+        unless p.nil? || p.is_a?(Project)
+          if p.to_s.blank?
+            p = nil
+          else
+            p = Project.find_by_id(p)
+          end
+        end
+
+        new_parent = p
+        old_parent = parent
+
+        success = set_parent_without_project_groups!(p)
+
+        return false unless success
+        return success if new_parent == old_parent
+
+        rebuild_group_hierarchy!
+        true
+      end
+
+      # Projects cannot be moved to their descendants, so we are concerned only about parent's groups (add them)
+      # and groups inherited from parent (remove them)
+      #
+      # 1. Remove all inherited groups from project_groups
+      # 2. Copy parent's project_groups
+      # 3. Repeat for each child
+      def rebuild_group_hierarchy!
+        #ActiveRecord::Base.transaction do
+          remove_foreign_groups!
+          #project_groups.reject! { |group| child_groups.include? group }
+          add_parents_groups!
+        #end
+        children.each do |child|
+          child.rebuild_group_hierarchy!
+        end
+      end
+
+      # Removes all project_groups which aren't owned by this project
+      def remove_foreign_groups!
+        return if project_groups.empty?
+
+        cond_str = 'project_id = ?'
+        cond = [id]
+        if child_groups.any?
+          cond_str += ' AND project_group_id NOT IN (?)'
+          cond << child_group_ids
+        end
+        ProjectGroupScope.delete_all([cond_str, *cond])
+      end
+
+      # Copies project_groups from parent
+      def add_parents_groups!
+        unless parent.nil? or parent.project_groups.empty?
+          project_groups << parent.project_groups
+        end
+      end
+
+      # Removes all child groups from given descendants
+      # @deprecated
+      def remove_groups_from_descendants!(descendant_ids)
+        if child_groups.any?
+          ProjectGroupScope.delete_all(['project_id = ? AND project_group_id IN (?)', descendant_ids, child_group_ids])
+        end
+      end
+
+      # Add our child_groups to each descendant
+      # See also ProjectGroup#add_to_descendants
+      # @deprecated
+      def add_groups_to_descendants!
+        descendants.each do |project|
+          project.project_groups << child_groups
+        end
       end
 
     end
