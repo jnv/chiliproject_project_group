@@ -9,7 +9,7 @@ class GroupTest < ActiveSupport::TestCase
   context "Group" do
     subject { Group.new }
 
-    should_validate_uniqueness_of :lastname, :scoped_to => "project_group_project_id"
+    should_validate_uniqueness_of :lastname, :scoped_to => "project_group_project_id", :case_sensitive => false
 
   end
 
