@@ -4,7 +4,7 @@ class ProjectGroupsController < ApplicationController
   model_object ProjectGroup
   before_filter :find_project_by_project_id
   before_filter :authorize
-  before_filter :find_model_object, :except => [:new, :create] #assigns @project_group
+  before_filter :find_model_object, :except => [:new, :create] #=> @project_group
   before_filter :authorize_manageable, :except => [:new, :create, :show]
 
   def show
@@ -42,13 +42,22 @@ class ProjectGroupsController < ApplicationController
     respond_to do |format|
       if @project_group.update_attributes(params[:project_group])
         flash[:notice] = l(:notice_successful_update)
-        format.html { redirect_to(edit_project_group_url(@project, @project_group)) }
+        format.html { redirect_to edit_project_group_url(@project, @project_group) }
         format.xml { head :ok }
       else
         load_users
         format.html { render :action => "edit", :tab => 'general' }
         format.xml { render :xml => @group.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    @project_group.destroy
+
+    respond_to do |format|
+      format.html { redirect_to :controller => "projects", :action => "settings", :id => @project, :tab => "project_groups" }
+      format.xml { head :ok }
     end
   end
 

@@ -4,6 +4,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class ProjectGroupsControllerTest < ActionController::TestCase
 
   fixtures :projects, :versions, :users, :roles, :members, :member_roles
+  #fixtures :all
 
   def setup
     @controller = ProjectGroupsController.new
@@ -96,6 +97,14 @@ class ProjectGroupsControllerTest < ActionController::TestCase
       end
       assert_true ProjectGroupScope.last.manageable, "Group should be manageable when created in the project"
       #assert_redirected_to ''
+    end
+  end
+
+  context "DELETE destroy" do
+    should "remove group" do
+      assert_difference 'ProjectGroup.count', -1 do
+        post :destroy, :project_id => @project, :id => @group
+      end
     end
   end
 
