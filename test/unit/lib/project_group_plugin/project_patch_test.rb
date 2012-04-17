@@ -10,6 +10,7 @@ class ProjectGroupPlugin::ProjectPatchTest < ActiveSupport::TestCase
     subject { Project.new }
 
     should_have_many :project_groups, :through => :project_group_scopes
+    should_have_many :child_groups, :dependent => :destroy
 
     context "#member_principals" do
       setup do

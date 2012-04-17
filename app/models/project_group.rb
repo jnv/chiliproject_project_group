@@ -4,7 +4,7 @@ class ProjectGroup < Group
 
   has_many :project_group_scopes, :dependent => :destroy
   has_many :projects, :through => :project_group_scopes
-  belongs_to :parent_project, :foreign_key => "project_group_project_id", :class_name => 'Project'
+  belongs_to :parent_project, :foreign_key => 'project_group_project_id', :class_name => 'Project'
 
   attr_protected :parent_project
 
