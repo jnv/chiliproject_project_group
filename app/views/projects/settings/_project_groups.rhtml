@@ -26,11 +26,11 @@
                   <%= link_to h(group), project_group_path(@project, group) %>
               <% end %>
             </td>
-            <td><%= link_to group.parent_project %></td>
-            <td align="center"><%= group.users.size %></td>
+            <td><%= link_to group.parent_project, project_path(group.parent_project) %></td>
+            <td align="centegrr"><%= group.users.size %></td>
             <td class="buttons">
               <% if group.is_child_of?(@project) %>
-                  <%= link_to l(:button_delete), group, :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
+                  <%= link_to l(:button_delete), project_group_path(@project, group), :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
               <% end %>
             </td>
           </tr>
