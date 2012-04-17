@@ -1,4 +1,4 @@
-<% group_scopes = @project.project_group_scopes %>
+<% groups = @project.project_groups %>
 
 <div class="contextual">
   <%= link_to l(:label_group_new), new_project_group_path(@project), :class => 'icon icon-add' %>
@@ -6,7 +6,7 @@
 
 <%= error_messages_for 'project_groups' %>
 
-<% if group_scopes.any? %>
+<% if groups.any? %>
     <table class="list groups">
       <thead>
       <tr>
@@ -17,11 +17,10 @@
       </tr>
       </thead>
       <tbody>
-      <% group_scopes.each do |scope| %>
-          <% group = scope.project_group %>
+      <% groups.each do |group| %>
           <tr class="<%= cycle 'odd', 'even' %>">
             <td>
-              <% if scope.manageable? %>
+              <% if can_manage_group?(project, group) %>
                   <%= link_to h(group), edit_project_group_path(@project, group) %>
               <% else %>
                   <%= link_to h(group), project_group_path(@project, group) %>
@@ -30,7 +29,7 @@
             <td><%= link_to group.parent_project %></td>
             <td align="center"><%= group.users.size %></td>
             <td class="buttons">
-              <% if scope.manageable? %>
+              <% if can_manage_group?(project, group) %>
                   <%= link_to l(:button_delete), group, :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
               <% end %>
             </td>

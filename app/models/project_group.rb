@@ -12,9 +12,9 @@ class ProjectGroup < Group
 
   after_create :add_to_descendants
 
-  def scope_with_project(project)
+  def is_child_of?(project)
     project_id = project.is_a?(Project) ? project.id : project.to_i
-    ProjectGroupScope.first(:conditions => {:project_id => project_id, :project_group_id => id})
+    project_id == parent_project.id
   end
 
   private

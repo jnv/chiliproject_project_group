@@ -12,20 +12,21 @@ class ProjectGroup < Group
 
 end
 
-def ProjectGroup.generate_for_project!(project, is_manageable = true, attributes={})
+def ProjectGroup.generate_for_project!(project, attributes={})
   group = ProjectGroup.spawn(attributes) do |group|
     group.parent_project = project
     group.projects = []
   end
   group.save!
 
+  # FIXME: Direct assignment of group.projects doesn't work. Wat?
   scope = group.project_group_scopes.create(:project => project)
-  scope.manageable = is_manageable
+  #scope.manageable = is_manageable
   scope.save!
 
   group
 end
 
 def ProjectGroup.generate_with_project!(attributes = {})
-  ProjectGroup.generate_for_project!(Project.generate!, true, attributes)
+  ProjectGroup.generate_for_project!(Project.generate!, attributes)
 end

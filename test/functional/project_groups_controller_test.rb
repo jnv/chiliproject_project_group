@@ -17,17 +17,21 @@ class ProjectGroupsControllerTest < ActionController::TestCase
     @request.session[:user_id] = 2 # manager, member of Project 1
 
     @project = Project.find(1)
-    @group = ProjectGroup.generate!(:projects => [@project])
+    @subproject = Project.find(5) # subproject of Project 1, User 2 is manager
+    @group = ProjectGroup.generate_for_project!(@project)
 
     @member = User.generate!
     @group.users << @member
 
-    @project_group_scope = @group.scope_with_project(@project)
-    @project_group_scope.manageable = true
-    @project_group_scope.save!
-
     @nonmember = User.generate!
   end
+
+  context "group" do
+    should "be already present in subproject" do
+      assert_include(@subproject.project_groups, @group)
+    end
+  end
+
 
   context "GET show" do
     setup do
@@ -95,7 +99,6 @@ class ProjectGroupsControllerTest < ActionController::TestCase
       assert_difference 'ProjectGroup.count', 1 do
         post :create, :project_id => @project, :project_group => {:lastname => 'New project group'}
       end
-      assert_true ProjectGroupScope.last.manageable, "Group should be manageable when created in the project"
       #assert_redirected_to ''
     end
   end
@@ -109,15 +112,12 @@ class ProjectGroupsControllerTest < ActionController::TestCase
   end
 
   context "#authorize_manageable" do
-    setup do
-      @project_group_scope.manageable = false
-      @project_group_scope.save!
-    end
+    # Project should be manageable only in parent project
 
-    {:edit => :get, :update => :put, :remove_user => :post, :add_users => :post}.each do |action, verb|
+    {:edit => :get, :update => :put, :remove_user => :post, :add_users => :post, :destroy => :delete}.each do |action, verb|
       context "#{verb.to_s.upcase} #{action}" do
         setup do
-          self.send verb, action, :project_id => @project, :id => @group
+          self.send verb, action, :project_id => @subproject, :id => @group
         end
         should_respond_with 403 # access denied
       end
@@ -126,14 +126,13 @@ class ProjectGroupsControllerTest < ActionController::TestCase
     {:show => :get, :new => :get, :create => :post}.each do |action, verb|
       context "#{verb.to_s.upcase} #{action}" do
         setup do
-          self.send verb, action, :project_id => @project, :id => @group
+          self.send verb, action, :project_id => @subproject, :id => @group
         end
-        should_respond_with :success
+        should "respond with #{:success}" do
+          matcher = respond_with(:success)
+          assert_accepts matcher, @controller
+        end
       end
     end
-
-
   end
-
-
 end

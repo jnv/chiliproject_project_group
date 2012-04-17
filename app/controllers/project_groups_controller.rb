@@ -21,13 +21,10 @@ class ProjectGroupsController < ApplicationController
   def create
     @project_group = ProjectGroup.new(params[:project_group])
     @project_group.parent_project = @project
+    @project_group.projects << @project #TODO this could be handled by model on create
     respond_to do |format|
       if @project_group.save
         # Group is manageable for the project in which was created
-        scope = @project_group.project_group_scopes.create(:project => @project)
-        scope.manageable = true
-        scope.save!
-
         flash[:notice] = l(:notice_successful_create)
         format.html { redirect_to edit_project_group_url(@project, @project_group, :tab => 'users') }
         format.xml { render :xml => @project_group, :status => :created, :location => @project_group }
@@ -95,14 +92,11 @@ class ProjectGroupsController < ApplicationController
     @users_not_in_group = User.active.not_in_group(@project_group).all(:limit => 100)
   end
 
-  # Prevents access if the group is not in project's scope or is not manageable
+  # Prevents access if the group is not a child of project
   def authorize_manageable
-    @project_group_scope = @project_group.scope_with_project(@project)
-
-    if @project_group_scope and @project_group_scope.manageable?
-      true
-    else
+    unless @project_group.is_child_of?(@project)
       deny_access
     end
+    true
   end
 end
