@@ -45,7 +45,9 @@ module ProjectGroupPlugin
         return false unless success
         return success if new_parent == old_parent
 
-        rebuild_group_hierarchy!
+        ActiveRecord::Base.transaction do
+          rebuild_group_hierarchy!
+        end
         true
       end
 
@@ -56,11 +58,9 @@ module ProjectGroupPlugin
       # 2. Copy parent's project_groups
       # 3. Repeat for each child
       def rebuild_group_hierarchy!
-        #ActiveRecord::Base.transaction do
-          remove_foreign_groups!
-          #project_groups.reject! { |group| child_groups.include? group }
-          add_parents_groups!
-        #end
+        remove_foreign_groups!
+        #project_groups.reject! { |group| child_groups.include? group }
+        add_parents_groups!
         children.each do |child|
           child.rebuild_group_hierarchy!
         end
