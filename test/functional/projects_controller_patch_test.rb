@@ -6,6 +6,8 @@ require File.expand_path('test/functional/projects_controller_test', RAILS_ROOT)
 
 class ProjectsControllerTest < ActionController::TestCase
 
+  fixtures :all
+
   #subject { ProjectsController }
 
   context "ProjectGroupsPlugin" do

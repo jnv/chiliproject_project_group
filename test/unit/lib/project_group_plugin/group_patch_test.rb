@@ -6,6 +6,8 @@ require File.expand_path('test/unit/group_test', RAILS_ROOT)
 
 class GroupTest < ActiveSupport::TestCase
 
+  fixtures :all
+
   context "Group" do
     subject { Group.new }
 
