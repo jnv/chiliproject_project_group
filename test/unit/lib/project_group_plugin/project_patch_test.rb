@@ -63,7 +63,7 @@ class ProjectGroupPlugin::ProjectPatchTest < ActiveSupport::TestCase
 
       # 1 - 3'- 5 - 6'
       #   - 4
-      should "make groups available for all descendants" do
+      should "make groups available for descendants" do
         assert_not_include @subproject6.project_group_ids, @subgroup3.id
         project5 = Project.find(5)
         project5.set_parent!(@subproject3)
@@ -77,10 +77,12 @@ class ProjectGroupPlugin::ProjectPatchTest < ActiveSupport::TestCase
         @root_group = ProjectGroup.generate_for_project!(@root)
       end
 
-      should_eventually "populate parent's groups in new projects" do
+      # Project#set_parent! should be always called on new project so we don't need an after_create callback
+      should "populate parent's groups in new projects" do
         project = Project.generate! do |proj|
           proj.set_parent!(@root)
         end
+
         assert_include project.project_groups, @root_group
       end
     end

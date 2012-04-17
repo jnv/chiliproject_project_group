@@ -81,9 +81,11 @@ module ProjectGroupPlugin
 
       # Copies project_groups from parent
       def add_parents_groups!
-        unless parent.nil? or parent.project_groups.empty?
-          project_groups << parent.project_groups
-        end
+        return if parent.nil? or parent.project_groups.empty?
+        #cmp = project_group_ids - parent.project_group_ids #=> []
+        #return if cmp.empty?
+
+        project_groups << parent.project_groups
       end
 
       # Removes all child groups from given descendants
