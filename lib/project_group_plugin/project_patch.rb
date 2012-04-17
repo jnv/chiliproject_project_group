@@ -8,7 +8,7 @@ module ProjectGroupPlugin
       base.class_eval do
         unloadable
         has_many :project_group_scopes
-        has_many :project_groups, :through => :project_group_scopes
+        has_many :project_groups, :through => :project_group_scopes, :uniq => true
         has_many :child_groups, :foreign_key => 'project_group_project_id', :class_name => 'ProjectGroup', :dependent => :destroy
 
         #XXX overrides default association
