@@ -20,7 +20,7 @@
       <% groups.each do |group| %>
           <tr class="<%= cycle 'odd', 'even' %>">
             <td>
-              <% if can_manage_group?(project, group) %>
+              <% if group.is_child_of?(@project) %>
                   <%= link_to h(group), edit_project_group_path(@project, group) %>
               <% else %>
                   <%= link_to h(group), project_group_path(@project, group) %>
@@ -29,7 +29,7 @@
             <td><%= link_to group.parent_project %></td>
             <td align="center"><%= group.users.size %></td>
             <td class="buttons">
-              <% if can_manage_group?(project, group) %>
+              <% if group.is_child_of?(@project) %>
                   <%= link_to l(:button_delete), group, :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
               <% end %>
             </td>
