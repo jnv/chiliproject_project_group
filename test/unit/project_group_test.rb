@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require File.expand_path('../../test_helper', __FILE__)
 
+require_dependency 'project'
 class ProjectGroupTest < ActiveSupport::TestCase
 
   fixtures :projects
@@ -28,10 +29,18 @@ class ProjectGroupTest < ActiveSupport::TestCase
 
   context "#add_to_descendants" do
     setup do
-      @project = Project.generate!
-      @subproject = Project.generate! do |subproject|
-        subproject.set_parent!(@project)
-      end
+      # XXX @project is being overwritten by @subproject; is it ObjectDaddy?
+      #@project = Project.generate!
+      #@subproject = Project.generate! do |subproj|
+      #  subproj.set_parent!(@project)
+      #end
+
+      # use fixtures
+      # 1 - 3
+      #   - 4
+      #   - 5 - 6
+      @project = Project.find(1)
+      @subproject = Project.find(6)
     end
 
     should "add new group to project's descendants" do
