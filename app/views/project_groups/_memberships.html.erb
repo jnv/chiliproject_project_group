@@ -1,0 +1,38 @@
+<div class="splitcontentleft">
+  <h3><%= l(:label_role_plural) %></h3>
+  <% if @project_group.memberships.any? %>
+      <table class="list memberships">
+        <thead>
+        <tr>
+          <th><%= l(:label_project) %></th>
+          <th><%= l(:label_role_plural) %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @project_group.memberships.each do |membership| %>
+            <tr id="member-<%= membership.id %>" class="<%= cycle 'odd', 'even' %> class">
+              <td class="project"><%= h membership.project %></td>
+              <td class="roles">
+                <span id="member-<%= membership.id %>-roles"><%= h membership.roles.sort.collect(&:to_s).join(', ') %></span>
+              </td>
+            </tr>
+        <% end; reset_cycle %>
+        </tbody>
+      </table>
+  <% else %>
+      <p class="nodata"><%= l(:label_no_data) %></p>
+  <% end %>
+</div>
+
+<div class="splitcontentright">
+  <h3><%= l(:label_project_plural) %></h3>
+
+  <ul>
+    <% @project_group.projects.each do |project| %>
+        <li>
+          <%= link_to h(project), project %>
+        </li>
+    <% end %>
+  </ul>
+
+</div>
