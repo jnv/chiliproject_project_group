@@ -14,6 +14,11 @@ Dispatcher.to_prepare :project_role_plugin do
 
   require_dependency 'group'
   Group.send(:include, ProjectGroupPlugin::GroupPatch) unless Group.included_modules.include? ProjectGroupPlugin::GroupPatch
+
+  require_dependency 'members_controller'
+  unless MembersController.included_modules.include? ProjectGroupPlugin::MembersControllerPatch
+    MembersController.send(:include, ProjectGroupPlugin::MembersControllerPatch)
+  end
 end
 
 Redmine::Plugin.register :chiliproject_project_group do
