@@ -2,7 +2,7 @@
 require 'redmine'
 require 'dispatcher'
 
-Dispatcher.to_prepare :project_role_plugin do
+Dispatcher.to_prepare :project_group_plugin do
   require_dependency 'project'
   Project.send(:include, ProjectGroupPlugin::ProjectPatch) unless Project.included_modules.include? ProjectGroupPlugin::ProjectPatch
 
