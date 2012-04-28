@@ -10,6 +10,10 @@ Provides per-project groups for ChiliProject. Groups can be created and managed 
 2. New tab "Groups" will appear in Project Settings, here you can create new group for this project
 3. You can add "Manage project groups" permission to roles, the permission is available in Permissions report
 
+## Dependencies
+
+Plugin depends on the [MembersView](https://github.com/jnv/chiliproject_members_view) gem. It will be picked by `bundle install`.
+
 ## Compatibility
 
 Plugin was tested with ChiliProject 3.1.0 and Ruby 1.9.3.
