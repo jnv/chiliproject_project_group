@@ -7,7 +7,9 @@ module ProjectGroupPlugin
       base.send(:include, InstanceMethods)
       base.class_eval do
         unloadable
+        include ChiliprojectMembersView::ProjectsHelperPatch
         alias_method_chain :project_settings_tabs, :project_groups
+        alias_method_chain :load_principals, :project_groups
       end
     end
 
@@ -27,18 +29,10 @@ module ProjectGroupPlugin
         tabs
       end
 
-      def load_roles
-        Role.find_all_givable
+      def load_principals_with_project_groups(project)
+        principals = load_principals_without_project_groups(project)
+        project.project_groups - project.principals + principals
       end
-
-      def load_members(project)
-        project.member_principals.find(:all, :include => [:roles, :principal]).sort
-      end
-
-      def load_principals(project)
-        project.project_groups + Principal.active.find(:all, :limit => 100, :order => 'type, login, lastname ASC') - project.principals
-      end
-
     end
 
   end

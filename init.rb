@@ -4,13 +4,19 @@ require 'dispatcher'
 
 Dispatcher.to_prepare :project_group_plugin do
   require_dependency 'project'
-  Project.send(:include, ProjectGroupPlugin::ProjectPatch) unless Project.included_modules.include? ProjectGroupPlugin::ProjectPatch
+  unless Project.included_modules.include? ProjectGroupPlugin::ProjectPatch
+    Project.send(:include, ProjectGroupPlugin::ProjectPatch)
+  end
 
   require_dependency 'projects_helper'
-  ProjectsHelper.send(:include, ProjectGroupPlugin::ProjectsHelperPatch) unless ProjectsHelper.included_modules.include? ProjectGroupPlugin::ProjectsHelperPatch
+  unless ProjectsHelper.included_modules.include? ProjectGroupPlugin::ProjectsHelperPatch
+    ProjectsHelper.send(:include, ProjectGroupPlugin::ProjectsHelperPatch)
+  end
 
   require_dependency 'group'
-  Group.send(:include, ProjectGroupPlugin::GroupPatch) unless Group.included_modules.include? ProjectGroupPlugin::GroupPatch
+  unless Group.included_modules.include? ProjectGroupPlugin::GroupPatch
+    Group.send(:include, ProjectGroupPlugin::GroupPatch)
+  end
 
   require_dependency 'members_controller'
   unless MembersController.included_modules.include? ProjectGroupPlugin::MembersControllerPatch
