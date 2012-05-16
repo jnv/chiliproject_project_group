@@ -9,6 +9,8 @@ module ProjectGroupPlugin
       base.class_eval do
         unloadable
 
+        named_scope :global_only, :conditions => {:type => 'Group'}
+
         # Kudos to Lawrence McAlpin
         # http://www.lmcalpin.com/post/5219540409/overriding-rails-validations-metaprogramatically
         @validate_callbacks.reject! do |c|

@@ -1,12 +1,8 @@
-<% project_groups = @project.project_groups %>
-
 <div class="contextual">
   <%= link_to l(:label_group_new), new_project_group_path(@project), :class => 'icon icon-add' %>
 </div>
 
-<%= error_messages_for 'project_groups' %>
-
-<% if project_groups.any? %>
+<% if @project_groups.any? %>
     <table class="list groups">
       <thead>
       <tr>
@@ -17,7 +13,7 @@
       </tr>
       </thead>
       <tbody>
-      <% project_groups.each do |group| %>
+      <% @project_groups.each do |group| %>
           <tr class="<%= cycle 'odd', 'even' %>">
             <td>
               <% if group.is_child_of?(@project) %>

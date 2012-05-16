@@ -22,6 +22,16 @@ Dispatcher.to_prepare :project_group_plugin do
   unless MembersController.included_modules.include? ProjectGroupPlugin::MembersControllerPatch
     MembersController.send(:include, ProjectGroupPlugin::MembersControllerPatch)
   end
+
+  require_dependency 'projects_controller'
+  unless ProjectsController.included_modules.include? ProjectGroupPlugin::ProjectsControllerPatch
+    ProjectsController.send(:include, ProjectGroupPlugin::ProjectsControllerPatch)
+  end
+
+  require_dependency 'groups_controller'
+  unless GroupsController.included_modules.include? ProjectGroupPlugin::GroupsControllerPatch
+    GroupsController.send(:include, ProjectGroupPlugin::GroupsControllerPatch)
+  end
 end
 
 Redmine::Plugin.register :chiliproject_project_group do
