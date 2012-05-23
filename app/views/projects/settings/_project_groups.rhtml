@@ -1,9 +1,9 @@
-<div class="contextual clear">
+<div class="contextual">
   <%= link_to l(:label_group_new), new_project_group_path(@project), :class => 'icon icon-add' %>
 </div>
 
 <% if @project_groups.any? %>
-    <table class="list groups">
+    <table class="list groups clearfix">
       <thead>
       <tr>
         <th><%= l(:label_group) %></th>
@@ -33,5 +33,5 @@
       <% end %>
       </table>
 <% else %>
-    <p class="nodata"><%= l(:label_no_data) %></p>
+    <p class="nodata clearfix"><%= l(:label_no_data) %></p>
 <% end %>
