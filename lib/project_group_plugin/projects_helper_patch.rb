@@ -3,17 +3,11 @@ module ProjectGroupPlugin
   module ProjectsHelperPatch
 
     def self.included(base)
-      base.extend(ClassMethods)
       base.send(:include, InstanceMethods)
       base.class_eval do
         unloadable
-        include ChiliprojectMembersView::ProjectsHelperPatch
         alias_method_chain :project_settings_tabs, :project_groups
-        alias_method_chain :load_principals, :project_groups
       end
-    end
-
-    module ClassMethods
     end
 
     module InstanceMethods
@@ -29,10 +23,6 @@ module ProjectGroupPlugin
         tabs
       end
 
-      def load_principals_with_project_groups(project)
-        principals = load_principals_without_project_groups(project)
-        project.project_groups - project.principals + principals
-      end
     end
 
   end

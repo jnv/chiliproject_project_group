@@ -13,6 +13,11 @@ Dispatcher.to_prepare :project_group_plugin do
     ProjectsHelper.send(:include, ProjectGroupPlugin::ProjectsHelperPatch)
   end
 
+  require_dependency 'members_view_helper'
+  unless MembersViewHelper.included_modules.include? ProjectGroupPlugin::MembersViewHelperPatch
+    MembersViewHelper.send(:include, ProjectGroupPlugin::MembersViewHelperPatch)
+  end
+
   require_dependency 'group'
   unless Group.included_modules.include? ProjectGroupPlugin::GroupPatch
     Group.send(:include, ProjectGroupPlugin::GroupPatch)
