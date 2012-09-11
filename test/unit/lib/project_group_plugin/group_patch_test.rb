@@ -4,7 +4,7 @@ require File.expand_path('../../../../test_helper', __FILE__)
 # Use and run existing test to be on safe side'
 require File.expand_path('test/unit/group_test', RAILS_ROOT)
 
-class GroupTest < ActiveSupport::TestCase
+class GroupPatchTest < GroupTest
 
   fixtures :all
 

@@ -1,12 +1,13 @@
 # -*- encoding : utf-8 -*-
 require File.expand_path('../../../../test_helper', __FILE__)
 
-require_dependency 'project'
-class ProjectGroupPlugin::ProjectPatchTest < ActiveSupport::TestCase
+require File.expand_path('test/unit/project_test', RAILS_ROOT)
+
+class ProjectPatchTest < ProjectTest
 
   #fixtures :all
 
-  context "Project" do
+  context "ProjectGroupPlugin" do
     subject { Project.new }
 
     should_have_many :project_groups, :through => :project_group_scopes
