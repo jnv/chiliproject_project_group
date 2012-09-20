@@ -26,7 +26,7 @@ class ProjectGroupsController < ApplicationController
       if @project_group.save
         # Group is manageable for the project in which was created
         flash[:notice] = l(:notice_successful_create)
-        format.html { redirect_to edit_project_group_url(@project, @project_group, :tab => 'users') }
+        format.html { redirect_to(:controller => 'projects', :action => 'settings', :id => @project, :tab => 'project_groups') }
         format.xml { render :xml => @project_group, :status => :created, :location => @project_group }
       else
         format.html { render :action => "new" }

@@ -99,7 +99,7 @@ class ProjectGroupsControllerTest < ActionController::TestCase
       assert_difference 'ProjectGroup.count', 1 do
         post :create, :project_id => @project, :project_group => {:lastname => 'New project group'}
       end
-      #assert_redirected_to ''
+      assert_redirected_to :controller => "projects", :action => "settings", :id => @project
     end
   end
 
